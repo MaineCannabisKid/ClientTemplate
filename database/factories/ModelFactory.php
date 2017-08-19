@@ -22,3 +22,15 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
         'remember_token' => str_random(10),
     ];
 });
+
+// Posts Seeder
+$factory->define(App\Post::class, function (Faker\Generator $faker) {
+
+    return [
+        'title' => $faker->unique()->realText(50),
+        'body' => $faker->unique()->paragraphs(5, true),
+        'slug' => $faker->slug,
+        'created_at' => $faker->dateTimeBetween("now", "+ 6 months"),
+        'updated_at' => $faker->dateTimeBetween("+ 6 months", "+ 1 year 6 months"),
+    ];
+});
