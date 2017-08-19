@@ -1,0 +1,2 @@
+@component('components.who')
+@endcomponent
