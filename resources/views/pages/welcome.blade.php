@@ -26,7 +26,10 @@
                     <a href="{{ route('blog.single', $post->slug) }}" class="btn btn-primary">Read More</a>
                 </div>
 
-                <hr>
+                {{-- Check if NOT last loop --}}
+                @if(!$loop->last)
+                    <hr>
+                @endif
 
             @endforeach
 

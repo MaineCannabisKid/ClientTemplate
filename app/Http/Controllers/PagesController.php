@@ -6,8 +6,6 @@ use App\Post;
 
 class PagesController extends Controller {
 
-	
-
 	public function getIndex() {
 		// Grab the Posts from the database
 		$posts = Post::orderBy('id', 'desc')->take(5)->get();

@@ -12,7 +12,7 @@ class BlogController extends Controller
 	// Get the Index of Blog Posts
     public function getIndex() {
     	// Grab all of the posts from the DB
-    	$posts = Post::paginate(10);
+    	$posts = Post::orderBy('created_at', 'desc')->paginate(10);
 
     	// Return the Index View
     	return view('blog.index')->withPosts($posts);
