@@ -13,7 +13,8 @@
 
         <div class="container">
 
-            @include('components.who')
+            @component('components.auth-debug')
+            @endcomponent
 
             @include('partials._messages')
 

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Post;
+use App\Tag;
+use App\Category;
 use Session;
 
 class PostController extends Controller
@@ -41,8 +43,16 @@ class PostController extends Controller
      */
     public function create()
     {
+        // Grab all the Categories
+        $categories = Category::all();
+
+        // Grab all Tags
+        $tags = Tag::all();
+
         // Show the Create Form to the User
-        return view('posts.create');
+        return  view('posts.create')
+                    ->withCategories($categories)
+                    ->withTags($tags);
     }
 
     /**
@@ -53,11 +63,14 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
+
         // Validate the data
         $this->validate($request, array(
-            'title' => 'required|max:255',
-            'slug' => 'required|alpha_dash|min:5|max:255|unique:posts,slug',
-            'body' => 'required'
+            'title'         => 'required|max:255',
+            'slug'          => 'required|alpha_dash|min:5|max:255|unique:posts,slug',
+            'category_id'   => 'required|integer',
+            'tags.*'        => 'integer',
+            'body'          => 'required'
         ));
 
         // Grab a new instance of the Post Model
@@ -66,10 +79,14 @@ class PostController extends Controller
         // Store Variables in Post Model
         $post->title = $request->title;
         $post->slug = $request->slug;
+        $post->category_id = $request->category_id;
         $post->body = $request->body;
 
         // Save the Object to the DB
         $post->save();
+
+        // Sync Tags with Post
+        $post->tags()->sync($request->tags, false);
 
         // Flash Success Message to User
         Session::flash('success', 'The blog post was successfully saved!');
@@ -104,10 +121,15 @@ class PostController extends Controller
     {
         // find the post in the database and save as variable
         $post = Post::find($id);
+        $categories = Category::all();
+
+        $tags = Tag::all();
 
         // return view
         return  view('posts.edit')
-                    ->withPost($post);
+                    ->withPost($post)
+                    ->withCategories($categories)
+                    ->withTags($tags);
     }
 
     /**
@@ -127,15 +149,19 @@ class PostController extends Controller
         if($request->input('slug') == $post->slug) {
             // Validate the data minus the slug because it didn't change
             $this->validate($request, array(
-                'title' => 'required|max:255',
-                'body' => 'required'
+                'title'         => 'required|max:255',
+                'category_id'   => 'required|integer',
+                'tags.*'        => 'integer',
+                'body'          => 'required'
             ));
         } else {
             // Validate the data minus the slug because it didn't change
             $this->validate($request, array(
-                'title' => 'required|max:255',
-                'slug' => 'required|alpha_dash|min:5|max:255|unique:posts,slug',
-                'body' => 'required'
+                'title'         => 'required|max:255',
+                'slug'          => 'required|alpha_dash|min:5|max:255|unique:posts,slug',
+                'category_id'   => 'required|integer',
+                'tags.*'        => 'integer',
+                'body'          => 'required'
             ));
         }
 
@@ -143,10 +169,15 @@ class PostController extends Controller
         // Set updates to the variables in the Post Object
         $post->title = $request->title;
         $post->slug = $request->slug;
+        $post->category_id = $request->category_id;
         $post->body = $request->body;
 
         // Save the changes to the Database
         $post->save();
+
+        // Sync and override the previous tags by not passing the 
+        // second parameter, which by default is true.
+        isset($request->tags) ? $post->tags()->sync($request->tags) : $post->tags()->sync([]);
 
         // Set Flash Data with Success Message
         Session::flash('success', 'This post was successfully saved.');
@@ -165,6 +196,9 @@ class PostController extends Controller
     {
         // Find the Post in the Database
         $post = Post::find($id);
+
+        // Delete rows from post_tag pivot table
+        $post->tags()->detach();
 
         // Delete the Item
         $post->delete();

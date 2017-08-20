@@ -12,11 +12,15 @@
             consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
             cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
             proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        </div>
+    </div>
 
-            <hr>
+    <hr>
 
-            <form>
-
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            <form method="post" action="{{ route('contact.post') }}">
+                {!! csrf_field() !!}
                 <div class="form-group">
                     <label for="email">Email</label>
                     <input id="email" name="email" class="form-control" type="email">
@@ -29,10 +33,10 @@
                 
                 <div class="form-group">
                     <label for="message">Message</label>
-                    <textarea id="message" name="message" class="form-control">Type your message here...</textarea>
+                    <textarea id="message" name="message" class="form-control" placeholder="Type your message here..."></textarea>
                 </div>
                 
-                <button class="btn btn-success" type="submit">Send Message</button>
+                <button class="btn btn-success btn-block" type="submit">Send Message</button>
             </form>
         </div>
     </div>

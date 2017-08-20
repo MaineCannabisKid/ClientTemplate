@@ -21,6 +21,9 @@ class AdminLoginController extends Controller
 
     // Login
     public function login(Request $request) {
+        // Make sure to log out of User Table just in case
+        Auth::guard('web')->logout();
+        
     	// Validate Form Data
     	$this->validate($request, [
     		'email' => 'required|email',

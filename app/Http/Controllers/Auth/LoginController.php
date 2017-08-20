@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-
+use Illuminate\Http\Request;
 use Auth;
 
 class LoginController extends Controller
@@ -21,6 +21,32 @@ class LoginController extends Controller
     */
 
     use AuthenticatesUsers;
+
+    // Login
+    public function login(Request $request) {
+        // Make sure to log out of User Table just in case
+        Auth::guard('admin')->logout();
+        
+        // Validate Form Data
+        $this->validate($request, [
+            'email' => 'required|email',
+            'password' => 'required|min:6'
+        ]);
+
+        $credentials = [
+            'email' => $request->email,
+            'password' => $request->password
+        ];
+
+        // Attempt to log user in
+        if(Auth::attempt($credentials, $request->remember)) {
+            // if successful then redirect to their intended location
+            return redirect()->intended(route('user.dashboard'));
+        }
+
+        // if unsuccess then redirect back to the login with the form data
+        return redirect()->back()->withInput($request->only('email', 'remember'));
+    }
 
     /**
      * Where to redirect users after login.

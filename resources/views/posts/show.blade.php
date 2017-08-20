@@ -9,6 +9,15 @@
 		<div class="col-md-8">
 			<h1>{{ $post->title }}</h1>
 			<p class="lead">{{ $post->body }}</p>
+
+			<hr>
+			
+			<div class="tags">
+				@foreach ($post->tags as $tag)
+					<span class="label label-default">{{ $tag->name }}</span>		
+				@endforeach
+			</div>
+
 		</div> <!-- /.col-md-8 -->
 
 		<div class="col-md-4">
@@ -27,6 +36,9 @@
 
 					<dt>Last Updated:</dt>
 					<dd>{{ date('M j, Y h:ia', strtotime($post->updated_at)) }}</dd>
+
+					<dt>Category:</dt>
+					<dd>{{ $post->category->name }}</dd>
 				</dl>
 
 				<hr>
