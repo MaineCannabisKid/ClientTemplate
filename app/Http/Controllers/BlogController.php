@@ -22,12 +22,10 @@ class BlogController extends Controller
     // Get Single Post
     public function getSingle($slug) {
     	// Grab the post via slug
-    	$post = Post::where('slug', '=', $slug)->first();
+    	$post = Post::where('slug', $slug)->first();
 
     	// Return the Via Pass in Post Object
     	return view('blog.single')->withPost($post);
     }
-
-
     
 }

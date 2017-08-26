@@ -38,7 +38,7 @@
 					<dd>{{ date('M j, Y h:ia', strtotime($post->updated_at)) }}</dd>
 
 					<dt>Category:</dt>
-					<dd>{{ $post->category->name }}</dd>
+					<dd>{{ $post->category_id ? $post->category->name : "No Category Specified" }}</dd>
 				</dl>
 
 				<hr>

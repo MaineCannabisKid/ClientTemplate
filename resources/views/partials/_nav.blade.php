@@ -38,7 +38,7 @@
                 @else
                 
                 {{-- User Dropdown Menu --}}
-                <li>
+                <li class="{{ Request::is('blog') ? "active" : "" }}">
                     <a href="{{ route('blog.index') }}">Blog</a>
                 </li>
                 

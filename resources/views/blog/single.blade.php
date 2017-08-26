@@ -1,3 +1,7 @@
+<?php
+	// dd($post);
+?>
+
 @extends('main')
 
 @section('title', $post->title)
@@ -10,8 +14,9 @@
 			<h5>Published: {{ date('M j, Y', strtotime($post->created_at)) }}</h5>
 			<p>{{ $post->body }}</p>
 			<hr>
-			<p>Posted In: {{ $post->category->name }}</p>
+			<p>Posted In: {{ $post->category_id ? $post->category->name : "No Category Specified" }}</p>
 		</div>
 	</div>
 
 @endsection
+

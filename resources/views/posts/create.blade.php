@@ -5,6 +5,8 @@
 @section('stylesheets')
 	{!! Html::style('css/parsley.css') !!}
 	{!! Html::style('css/select2.min.css') !!}
+	{{-- Added up top to compensate for load time --}}
+	<script src="/js/tinymce/tinymce.min.js"></script>
 @endsection
 
 @section('content')
@@ -60,6 +62,13 @@
 @section('scripts')
 	{!! Html::script('js/parsley.min.js') !!}
 	{!! Html::script('js/select2.min.js') !!}
+
+	<script>
+		tinymce.init({
+			selector:'textarea',
+			plugins: ['link', 'image']
+		});
+	</script>
 
 	<script type="text/javascript">
 		$(".select2-multi").select2();

@@ -4,6 +4,8 @@
 
 @section('stylesheets')
 	{!! Html::style('css/select2.min.css') !!}
+	{{-- Added up top to compensate for load time --}}
+	<script src="/js/tinymce/tinymce.min.js"></script>
 @endsection
 
 @section('content')
@@ -82,13 +84,21 @@
 @section('scripts')
 	{!! Html::script('js/select2.min.js') !!}
 
+	{{-- Tiny MCE Textarea Editor --}}
+	<script>
+		tinymce.init({
+			selector:'textarea',
+			plugins: ['link', 'image']
+		});
+	</script>
+
+	{{-- Javascript Validation --}}
 	<script type="text/javascript">
 		// Set tags field to select2 field
 		$(".select2-multi").select2();
 
 		// Dynamically Set Values of Tags Form Input
 		$(".select2-multi").val({!! json_encode($post->tags->pluck('id')->all()) !!}).trigger("change");
-
 
 	</script>
 @endsection
